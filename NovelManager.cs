@@ -12,8 +12,12 @@ namespace NovelGame{
         public NovelManager(TextAsset masterNovelTextAsset)
         {
             //最初のマスターnovelの読み込みを、アセットに設定されているAssets/Text/novel.txtから読み込む。
-            StringReader reader = new StringReader(masterNovelTextAsset.text);
-            masterNovel = LoadNovel(reader);
+            //しかし、このコードは配布ビルドだとバイナリにAssets/Text/novel.txtが含まれないため意味がない。
+            //StringReader reader = new StringReader(masterNovelTextAsset.text);
+            //masterNovel = LoadNovel(reader);
+
+            //したがって、新たにResources/novel.txtを読み込んでくる必要がある。
+            masterNovel = LoadNovelFromFile("novel");//拡張子は不要のunity仕様らしい。
             LoadAllSubNovel();
         }
 
@@ -41,16 +45,16 @@ namespace NovelGame{
             foreach(string name in names){
                 //それぞれに対して、LoadNovelFromFileを実行
                 string subNovelFileName = Path.GetFileNameWithoutExtension(name);
-                List<string> novel = LoadNovelFromFile(subNovelFileName);
+                List<string> novel = LoadNovelFromFile("Novels/" + subNovelFileName);
                 string id = subNovelFileName;
                 novels.Add(id, novel);
             }
         }
 
-        private List<string> LoadNovelFromFile(string fileName)
+        private List<string> LoadNovelFromFile(string filePath)
         {
             List<string> res = new List<string>();
-            TextAsset text = Resources.Load<TextAsset>("Novels/" + fileName);
+            TextAsset text = Resources.Load<TextAsset>(filePath);
             StringReader reader = new StringReader(text.text);
             return LoadNovel(reader);
         }
