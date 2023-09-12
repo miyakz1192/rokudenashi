@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using NovelGame.Log;
 
 namespace NovelGame{
     [System.Serializable] //定義したクラスをJSONデータに変換できるようにする
@@ -32,6 +33,12 @@ namespace NovelGame{
             this.playerId = playerId;
         }
 
+        protected static string PlayerPrefsKey(string id){
+            //PlayerPrefsに与えるkey_nameを生成
+            //id(ユーザ名) + _logとなる。
+            return id + "_playlog";
+        }
+
         /// <summary>
         /// idで指定したplayerLogをすべて読み込む
         /// </summary>
@@ -39,6 +46,16 @@ namespace NovelGame{
         /// <returns></returns>
         public static PlayLog Load(string id)
         {
+            PlayLog res;
+            string rawDataAsJSON = PlayerPrefs.GetString(PlayerPrefsKey(id));
+            res = JsonUtility.FromJson<PlayLog>(rawDataAsJSON);
+            MyDebug.Log($"Loading Player Log as {id}");
+            if(res == null){//Jsonパースがうまく行かなかった場合
+                return new PlayLog(id);
+            }
+            MyDebug.Log($"Loaded Player Log as {id} , len={res.records.Count}");
+            return res;
+            /* //android対応前
             PlayLog res;
             string filePath = Application.dataPath + "/Resources/PlayerInfo/Log/" + id + ".txt";
             if(System.IO.File.Exists(filePath)){
@@ -53,6 +70,7 @@ namespace NovelGame{
             }else{
                 return new PlayLog(id);
             }
+            */
         }
 
         public void Save()
@@ -62,12 +80,17 @@ namespace NovelGame{
 
         public static void Save(PlayLog playLog)
         {
+            string jsonstr = JsonUtility.ToJson(playLog);//受け取ったPlayerDataをJSONに変換
+            PlayerPrefs.SetString(PlayerPrefsKey(playLog.playerId), jsonstr);
+            MyDebug.Log($"Saving Player Log as {playLog.playerId} , len={playLog.records.Count}");
+            /* //Android対応前
             string filePath = Application.dataPath + "/Resources/PlayerInfo/Log/" + playLog.playerId + ".txt";
             string jsonstr = JsonUtility.ToJson(playLog);//受け取ったPlayerDataをJSONに変換
             StreamWriter writer = new StreamWriter(filePath, false);//初めに指定したデータの保存先を開く(falseを指定してファイルを上書き)
             writer.WriteLine(jsonstr);//JSONデータを書き込み
             writer.Flush();//バッファをクリアする
             writer.Close();//ファイルをクローズする
+            */
         }
     }
 }

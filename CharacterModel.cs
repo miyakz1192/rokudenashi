@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using NovelGame.Log;
 
 namespace NovelGame
 {
@@ -25,10 +26,22 @@ namespace NovelGame
         /// <param name="name"></param>
         public static CharacterModel Load(string name)
         {
+            try{
+                MyDebug.Log($"[INFO] CharacterModel.Load, name={name}");
+                TextAsset textDataAsJSON = Resources.Load<TextAsset>($"Character/{name}");
+                return JsonUtility.FromJson<CharacterModel>(textDataAsJSON.text);
+            }catch(Exception e){
+                MyDebug.Log($"[ERROR] in CharacterModel.Load {e.Message}");
+            }
+            MyDebug.Log($"[WARN] CharacterModel.Load, return null route");
+            return null;
+
+            /*//従来処理 androd対応前
             string filePath = Application.dataPath + "/Resources/Character/" + name + ".txt";
             StreamReader reader = new StreamReader(filePath);
             string jsonData = reader.ReadToEnd();
             return JsonUtility.FromJson<CharacterModel>(jsonData);
+            */
         }
 
         public string GetId()

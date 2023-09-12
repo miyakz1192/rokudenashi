@@ -26,7 +26,7 @@ namespace NovelGame
         void Awake()
         {
             lineNumber = 0;
-            _novelManager = new NovelManager(_textFile);
+            _novelManager = new NovelManager();
             _sentences = _novelManager.masterNovel;
         }
 

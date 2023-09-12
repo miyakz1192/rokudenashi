@@ -28,9 +28,7 @@ namespace NovelGame
             // これで、別のクラスからGameManagerの変数などを使えるようになる。
             Instance = this;
             //lineNumber = 0;
-            //MyDebug.Log("TempDebug=" + MyDebug.TempDebug());
-            //Thread.Sleep(1 * 1000);
-            MyDebug.Log("TempDebugAssets=" + MyDebug.TempDebugAssets());
+            MyDebug.Log("TempDebug=" + MyDebug.TempDebug());
         }
 
         public void FinishGame()

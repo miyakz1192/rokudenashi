@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
 using System;
+using System.IO;
+using NovelGame.Log;
+using UnityEngine;
 
 namespace NovelGame{
     [System.Serializable] //定義したクラスをJSONデータに変換できるようにする
@@ -25,6 +24,20 @@ namespace NovelGame{
         /// <returns></returns>
         public static Player Load(string id)
         {
+            try{
+                MyDebug.Log($"[INFO] Player.Load, id={id}");
+                TextAsset playerTextAsJSON = Resources.Load<TextAsset>($"PlayerInfo/Player/{id}");
+                MyDebug.Log($"[INFO] playerTextAsJSON, id={playerTextAsJSON}");
+                MyDebug.Log($"[INFO] playerTextAsJSON.txt, id={playerTextAsJSON.text}");
+                return JsonUtility.FromJson<Player>(playerTextAsJSON.text);
+            }catch(Exception e){
+                MyDebug.Log($"[ERROR] in Player.Load {e.Message}");
+            }
+            MyDebug.Log($"[WARN] Player.Load return null route");
+            Player res = new Player();
+            res.id = id;
+            return res;
+            /* //Android対応前
             string filePath = Application.dataPath + "/Resources/PlayerInfo/Player/" + id + ".txt";
             if(System.IO.File.Exists(filePath)){
                 StreamReader reader = new StreamReader(filePath);
@@ -35,6 +48,7 @@ namespace NovelGame{
                 res.id = id;
                 return res;
             }
+            */
         }
 
         public void AddLog(string targetQuestion = "invalid question", string playerAnswer = "invalid ans", Boolean playerResult=false)

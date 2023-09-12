@@ -16,7 +16,7 @@ public class MyDebug
             udpClient.Send(data, data.Length, serverIP, serverPort);
             Debug.Log("メッセージを送信しました: " + message);
         }catch (Exception e){
-            Debug.LogError("メッセージの送信中にエラーが発生しました: " + e.Message);
+            Debug.Log("[WARN]メッセージの送信中にエラーが発生しました: " + e.Message);
         }
     }
 
@@ -51,6 +51,17 @@ public class MyDebug
         }catch(Exception e){
             return "ERROR in TempDebugAssets="  + e.Message + " stack=" + e.ToString();
         }
+    }
+
+    public static string GetPWDfiles(){
+        string res = "";
+        //string[] names = Directory.GetFiles(@"Assets/Resources/Novels/", "*");
+        //string[] names = Directory.GetFiles(".", "*");//これはIOアクセス制限に引っかかる。
+        TextAsset[] texts = Resources.LoadAll<TextAsset>("Novels/");//おそらくこれが正しい。
+        foreach(TextAsset text in texts){
+            res += " " + text.name;
+        }
+        return res;
     }
 
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.IO;
 using System;
+using NovelGame.Log;
+
 
 namespace NovelGame
 {
@@ -21,6 +23,18 @@ namespace NovelGame
 
         protected static string LoadData(string id)
         {
+            try{
+                MyDebug.Log($"[INFO] PlayerPlan.LoadData, id={id}");
+                TextAsset playerPlanTextAsJSON = Resources.Load<TextAsset>($"PlayerInfo/Plan/{id}");
+                MyDebug.Log($"[INFO] playerPlanTextAsJSON, id={playerPlanTextAsJSON}");
+                MyDebug.Log($"[INFO] playerPlanTextAsJSON.txt, id={playerPlanTextAsJSON.text}");
+                return playerPlanTextAsJSON.text;
+            }catch(Exception e){
+                MyDebug.Log($"[ERROR] in PlayerPlan.LoadData {e.Message}");
+            }
+            MyDebug.Log($"[WARN] PlayerPlan.LoadData, return null route");
+            return null;
+            /* //Android対応前
             string filePath = Application.dataPath + "/Resources/PlayerInfo/Plan/" + id + ".txt";
             if(System.IO.File.Exists(filePath)){
                 StreamReader reader = new StreamReader(filePath);
@@ -30,6 +44,7 @@ namespace NovelGame
             }else{
                 return null;
             }
+            */
         }
 
         public static PlayerPlan Load(string id)
