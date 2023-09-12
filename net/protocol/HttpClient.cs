@@ -56,7 +56,7 @@ namespace NovelGame.Net.Protocol{
 */
 public class HttpClient{
 
-    private bool done_flg = false;
+//    private bool done_flg = false;
     public string buf_string = null;
     public byte[] buf_byte = null;
 
@@ -69,7 +69,7 @@ public class HttpClient{
  
     public IEnumerator _Download(string url) {
         Debug.Log("[START] _DownloadText=" + url);
-        this.done_flg = false;
+//        this.done_flg = false;
         Debug.Log("_DownloadText:UnityWebRequest.Get(url)-START");
         //UnityWebRequest www = UnityWebRequest.Get(url);
         UnityWebRequest www =  UnityWebRequest.Get(url);
