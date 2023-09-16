@@ -16,6 +16,12 @@ namespace Tests{
 
     //使い捨てのメソッド
     public class DataTransfer{
+        /**
+        　PlayerLogをResources配下から、PlayerPrefsに移行するための
+        　使い捨てのプログラムを、テストとして作った。
+        　すでに移行済みのため、もう以下のコードは使わない。
+        　テストとしていつも成功する。
+        */
         [Test]
         public void DataTransferTest(){
             string id = "souchan";
