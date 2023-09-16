@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Text;
 
 /**
 https://tech.mof-mof.co.jp/blog/unity-http-request/
@@ -66,8 +67,15 @@ public class HttpClient{
         while(ie.MoveNext()){}
         Debug.Log("[END] Download");
     }
- 
-    public IEnumerator _Download(string url) {
+
+    public void Upload(string url, string content) {
+        Debug.Log("[START] Upload");
+        IEnumerator ie = this._Upload(url, content);
+        while(ie.MoveNext()){}
+        Debug.Log("[END] Upload");
+    }
+
+    protected IEnumerator _Download(string url) {
         Debug.Log("[START] _DownloadText=" + url);
 //        this.done_flg = false;
         Debug.Log("_DownloadText:UnityWebRequest.Get(url)-START");
@@ -103,8 +111,38 @@ public class HttpClient{
         Debug.Log("[END] _DownloadText");
     }
 
+    protected IEnumerator _Upload(string url, string content){
+        // content文字列をバイト列として読み込む
+        byte[] rawData = Encoding.UTF8.GetBytes(content);
+
+        UnityWebRequest www = UnityWebRequest.Put(url,rawData);
+
+        // サーバーからのレスポンスを受け取るためのダウンロードハンドラーを設定
+        // PUTメソッド時には必須ではないが、一応、設定しておく。
+        // こうすることで、PUTリクエスト時のサーバからの応答を受け取れる。
+        www.downloadHandler = new DownloadHandlerBuffer();
+
+        // リクエストを送信し、レスポンスを待つ
+        yield return www.SendWebRequest();
+
+        // エラーチェック
+        //if (www.isNetworkError || www.isHttpError)//この形式は古い
+        if( www.result == UnityWebRequest.Result.ConnectionError)
+        {
+            Debug.LogError("アップロードエラー: " + www.error);
+        }
+        else
+        {
+            Debug.Log("アップロード成功!");
+            Debug.Log("サーバーレスポンス: " + www.downloadHandler.text);
+        }
+
+        // リクエストを解放
+        //www.Dispose();
+    }
+   
+    }
+
 }
 
 
-
-}
