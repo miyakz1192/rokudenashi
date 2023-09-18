@@ -1,3 +1,4 @@
+using System.Threading;
 using NovelGame;
 using NovelGame.Log;
 using NovelGame.ResourceManagement;
@@ -41,10 +42,14 @@ public class PlayerLogAtServerTest
         return playLog;
     }
 
-    [Test]
-    public void PlayerLogAtServerShouldLoadPlayerLogsFromServer_0recs(){
-        PlayLog playLog = this.GenerateTestLog(this.player_id, 0);
+    protected void PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(int playLogCount = 0){
+        PlayLog playLog = this.GenerateTestLog(this.player_id, playLogCount);
         PlayerLogAtServer plas = new PlayerLogAtServer(this.player_id);
+
+        //念の為のチェック。
+        Assert.AreEqual(playLogCount >= 0, true);
+        //生成したテストデータの長さを念の為チェック。
+        Assert.AreEqual(playLog.records.Count, playLogCount);
 
         //一回Uploadする
         plas.Save(playLog);
@@ -53,11 +58,21 @@ public class PlayerLogAtServerTest
         PlayLog target = plas.Load();
         Assert.AreEqual(target.records.Count, playLog.records.Count);
         Assert.AreEqual(target.playerId, playLog.playerId);
+
+        //データのチェック
+        for(int i = 0; i < playLogCount ; i ++){
+            string chkTgt = target.records[i].targetQuestion;
+            MyDebug.Log($"PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer [{i}]=={chkTgt}");
+            Assert.AreEqual(chkTgt, playLog.records[i].targetQuestion);
+        }
     }
 
     [Test]
-    public void PlayerLogAtServerShouldSavePlayerLogsToServer(){
-        
+    public void PlayerLogAtServerShouldSaveAndLoadPlayerLogsToServer(){
+        this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(0);
+        this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(1);
+        this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(2);
+        this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(10);
     }
 
 }
