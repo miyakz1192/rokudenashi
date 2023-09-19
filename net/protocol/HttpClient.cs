@@ -111,6 +111,7 @@ public class HttpClient{
         Debug.Log("[END] _DownloadText");
     }
 
+    /*
     protected IEnumerator _Upload(string url, string content){
         // content文字列をバイト列として読み込む
         byte[] rawData = Encoding.UTF8.GetBytes(content);
@@ -129,18 +130,65 @@ public class HttpClient{
         //if (www.isNetworkError || www.isHttpError)//この形式は古い
         if( www.result == UnityWebRequest.Result.ConnectionError)
         {
-            Debug.LogError("アップロードエラー: " + www.error);
+            Debug.LogError("Upload Error: " + www.error);
         }
         else
         {
-            Debug.Log("アップロード成功!");
-            Debug.Log("サーバーレスポンス: " + www.downloadHandler.text);
+            Debug.Log("Upload OK!");
+            Debug.Log("Server Response " + www.downloadHandler.text);
         }
 
         // リクエストを解放
         //www.Dispose();
-    }
+    }*/
    
+    protected IEnumerator _Upload(string url, string content){
+        //byte[] myData = System.Text.Encoding.UTF8.GetBytes(content);
+        byte[] myData = Encoding.UTF8.GetBytes(content);
+        using (UnityWebRequest www = UnityWebRequest.Put(url, myData)){
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.SendWebRequest();
+
+            Debug.Log("wait for request");
+
+            //リクエストが完了するまで待機
+            //パターン1
+            /*
+            while(!www.isDone){
+                Debug.Log("waiting.... yield return 0");
+                yield return 0;
+            }*/
+            //パターン2 https://qiita.com/yjiro0403/items/df4b6ba855db2a1cc41b
+            while (!www.isDone);
+
+            Debug.Log("Request is done!");
+
+            switch(www.result){
+                case UnityWebRequest.Result.InProgress:
+                    Debug.Log("Upload InProgress!");
+                break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log("Upload complete!");
+                break;
+                default: //その他のケースはすべてエラー
+                    Debug.Log("Upload Error!");
+                    Debug.Log(www.error);
+                break;
+            }
+            /*
+            if( www.result == UnityWebRequest.Result.InProgress){
+
+            }
+
+            if (www.result != UnityWebRequest.Result.Success){
+                Debug.Log("Upload Error!");
+                Debug.Log(www.error);
+            }else{
+                Debug.Log("Upload complete!");
+            }
+            */
+        }
+    }
     }
 
 }

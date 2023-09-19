@@ -74,6 +74,14 @@ public class PlayerLogAtServerTest
         this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(2);
         this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(10);
     }
+    [Test]
+    public void PlayerLogAtServerShouldSaveAndLoadPlayerLogsToServerHuge(){
+        //100万件だと、UnitTest時にUnityEditerまるごとダウン。
+        //this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(1000000);
+        //個人プレイだと1万件ですごいレベルなので、コレくらいに抑えておく。
+        this.PlayerLogAtServerShouldSaveAndLoadPlayerLogsFromServer_num(10000);
+    }
+
 
 }
 }
