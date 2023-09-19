@@ -64,6 +64,16 @@ namespace Tests{
                 Assert.AreEqual(c.buf_byte[i], expected[i]);
             }
         }
-
+        [Test]
+        public void DownloadHuge(){
+            string target = "huge";
+            HttpClient c = new HttpClient();
+            c.Download(this.url + target);
+            Debug.Log($"downloaded Length={c.buf_byte.Length}");
+            Assert.AreEqual(c.buf_byte.Length, 104857600);
+            for(int i = 0 ; i < c.buf_byte.Length; i ++ ){
+                Assert.AreEqual(c.buf_byte[i], (byte)0);
+            }
+        }
     }
 }
