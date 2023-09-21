@@ -52,6 +52,16 @@ namespace NovelGame.Net.Protocol{
     }
 }
 
+public class HttpClientException : System.Exception
+{
+    public HttpClientException() { }
+    public HttpClientException(string message) : base(message) { }
+    public HttpClientException(string message, System.Exception inner) : base(message, inner) { }
+    protected HttpClientException(
+        System.Runtime.Serialization.SerializationInfo info,
+        System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}
+
 /**
 注意：このクラスのインスタンスを複数スレッド/コルーチンから使わないこと。
 */
@@ -97,6 +107,7 @@ public class HttpClient{
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("Request Error = " + www.result);
             Debug.Log(www.error);
+            throw new HttpClientException();
         }
         else {
             // 結果をテキストで表示

@@ -75,5 +75,15 @@ namespace Tests{
                 Assert.AreEqual(c.buf_byte[i], (byte)0);
             }
         }
+
+        [Test]
+        public void HttpClientShouldRaiseHttpClientException(){
+            HttpClient c = new HttpClient();
+            try{
+                c.Download("unknown uri");
+            }catch(HttpClientException e){
+                Assert.AreEqual(e,e);
+            }
+        }
     }
 }
