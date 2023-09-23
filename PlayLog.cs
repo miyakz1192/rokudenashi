@@ -20,6 +20,23 @@ namespace NovelGame{
             this.playerAnswer = playerAnswer;
             this.playerResult = playerResult;
         }
+
+        public override bool Equals(object obj){
+            if (obj == null || GetType() != obj.GetType()){
+                return false;
+            }
+
+            PlayLogRecord r = (PlayLogRecord)obj;
+            return timeStamp.Equals(r.timeStamp) && targetQuestion.Equals(r.targetQuestion) &&
+                   playerAnswer.Equals(r.playerAnswer) && playerResult.Equals(r.playerResult);
+        }
+
+        public override int GetHashCode()
+        {
+            //Equalsをオーバライドした場合、GetHashCodeもオーバライドが必要(しないと、warningがでる)
+            // 各プロパティのハッシュコードを組み合わせて一意なハッシュコードを生成
+            return HashCode.Combine(timeStamp, targetQuestion, playerAnswer, playerResult);
+        }
     }
 
     [System.Serializable] //定義したクラスをJSONデータに変換できるようにする
