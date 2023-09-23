@@ -5,6 +5,7 @@ using Assert = UnityEngine.Assertions.Assert; // AssertはNUnitのではなくUn
 using System;
 using NovelGame.Log;
 using System.IO;
+using NovelGame;
 
 namespace Tests{
     public class MyDebugTest{
@@ -37,7 +38,14 @@ namespace Tests{
             */
             //試しにReadしてみる。
             //PlayerPrefs.GetString(id + "_playlog");
-            Debug.Log(PlayerPrefs.GetString(id + "_playlog"));
+            Player p = new Player();
+            p.id = "souchan";
+            p.LoadAllData();
+            //Debug.Log(PlayerPrefs.GetString(id + "_playlog"));//これを実行すると、デバッグログの表示があふれて、後続がデバッグログ出ず。なので、コメントアウト
+            Debug.Log($"loglen = {p.playLog.records.Count}");
+            foreach(PlayLogRecord r in p.playLog.records){
+                Debug.Log(r.timeStamp);
+            }
         }
     }
 }
