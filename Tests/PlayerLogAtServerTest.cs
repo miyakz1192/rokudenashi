@@ -9,7 +9,7 @@ using Assert = UnityEngine.Assertions.Assert; // AssertはNUnitのではなくUn
 namespace Tests{
 public class PlayerLogAtServerTest
 {
-    public string player_id = "souchan";
+    public string player_id = "testplayer";
     protected void ShowPlayerLog(string player_id){
         //プレイヤーログを表示する（サンプル)
         PlayLog playLog = PlayLog.Load(player_id);

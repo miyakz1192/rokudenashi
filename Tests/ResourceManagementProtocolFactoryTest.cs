@@ -8,7 +8,7 @@ public class ResourceManagementProtocolFactoryTest
 {
     [Test]
     public void ResourceManagementProtocolFactoryShouldReturnNewInstance(){
-        ResourceManagementProtocol rmp = ResourceManagementProtocolFactory.Create("souchan");
+        ResourceManagementProtocol rmp = ResourceManagementProtocolFactory.Create("testplayer");
         Assert.AreEqual(rmp, rmp);
     }
 }
