@@ -38,8 +38,10 @@ namespace Tests{
             */
             //試しにReadしてみる。
             //PlayerPrefs.GetString(id + "_playlog");
-            Player p = new Player();
-            p.id = "souchan";
+            Player p = new Player
+            {
+                id = "souchan"
+            };
             p.LoadAllData();
             //Debug.Log(PlayerPrefs.GetString(id + "_playlog"));//これを実行すると、デバッグログの表示があふれて、後続がデバッグログ出ず。なので、コメントアウト
             Debug.Log($"loglen = {p.playLog.records.Count}");
