@@ -25,8 +25,6 @@ namespace Tests{
         */
         [Test]
         public void DataTransferTest(){
-            string id = "souchan";
-
             /*//完了
             //souchanのPlayerLogを生stringで取得する。
             string filePath = Application.dataPath + "/Resources/PlayerInfo/Log/" + id + ".txt";
