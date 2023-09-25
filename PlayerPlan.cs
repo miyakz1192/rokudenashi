@@ -61,7 +61,7 @@ namespace NovelGame
             }   
         }
 
-        public virtual string CurrenctStatusAsNovelText()
+        public virtual string CurrentStatusAsNovelText()
         {
             return "none";
         }
@@ -74,7 +74,7 @@ namespace NovelGame
             return JsonUtility.FromJson<PlayerPlanDecType>(LoadData(id));
         }
 
-        public override string CurrenctStatusAsNovelText()
+        public override string CurrentStatusAsNovelText()
         {
             if(this.player == null){
                 return "ERROR: player not found in CurrenctStatusAsNovelText";
