@@ -189,7 +189,7 @@ namespace NovelGame
                         List<string> temp = new List<string>();
                         temp.Add("本日の結果は、正解数＝" + player.total_correct_questions + "、全問数＝" + player.total_answered_questions + "でした!");
                         temp.Add("お疲れ様でした。よくがんばったね！");
-                        temp.Add(player.plan.CurrentStatusAsNovelText());
+                        temp.AddRange(player.plan.CurrentStatusAsNovelText());
                         _sentences.InsertRange(lineNumber+1, temp);
                         break;
                     case "pause":

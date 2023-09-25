@@ -64,9 +64,9 @@ namespace NovelGame
             }   
         }
 
-        public virtual string CurrentStatusAsNovelText()
+        public virtual List<string> CurrentStatusAsNovelText()
         {
-            return "none";
+            return new List<string>();
         }
     }
 
@@ -77,10 +77,13 @@ namespace NovelGame
             return JsonUtility.FromJson<PlayerPlanDecType>(LoadData(id));
         }
 
-        public override string CurrentStatusAsNovelText()
+        public override List<string> CurrentStatusAsNovelText()
         {
+            List<string> retList = new List<string>();
+
             if(this.player == null){
-                return "ERROR: player not found in CurrenctStatusAsNovelText";
+                retList.Add("ERROR: player not found in CurrenctStatusAsNovelText");
+                return retList;
             }
 
             //1.いわゆる、PlayerPrefs上のログ＋現在のプレイのログを読み込む
@@ -101,7 +104,15 @@ namespace NovelGame
             res += player.disp_name + "は、いままで" + temp.records.Count + " 回問題をやりましたから、" + disp_target_name + "は減っており、現在は、" + now_val + "です。";
             res += "目標 " + goal_val + " まで、頑張ろう！";
 
-            return res;
+            retList.Add(res);
+
+            //サーバから持ってきたログの長さが0の場合、サーバがダウン等の場合があるので、
+            //プレイヤーが心配しないように追加しておく
+            if(logAtServer.records.Count == 0){
+                retList.Add($"サーバに接続できないから、今まで実施した問題回数が少なく表示されているかも({temp.records.Count})。不明点はお父さんに聞いてね！");
+            }
+
+            return retList;
         }
     }
 
