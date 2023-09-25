@@ -3,6 +3,8 @@ using System.IO;
 using NovelGame.Log;
 using UnityEngine;
 
+using NovelGame.ResourceManagement;
+
 namespace NovelGame{
     [System.Serializable] //定義したクラスをJSONデータに変換できるようにする
     public class Player
@@ -83,6 +85,12 @@ namespace NovelGame{
         {
             SaveLog();
             SavePlan();
+        }
+
+        public void SaveAllWithNetworking(){
+            ResourceUpdaterWithNetworking sv = new ResourceUpdaterWithNetworking();
+            sv.UpdatePlayLog(this);//SaveLogの代わりにUpdatePlayLogを呼び出す
+            SavePlan();//SavePlanは現状、noop
         }
 
         private void SaveLog()

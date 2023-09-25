@@ -3,6 +3,9 @@ using System.IO;
 using System;
 using NovelGame.Log;
 
+using NovelGame.ResourceManagement;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NovelGame
 {
@@ -80,12 +83,22 @@ namespace NovelGame
                 return "ERROR: player not found in CurrenctStatusAsNovelText";
             }
 
-            PlayLog log = this.player.playLog;//TODO: Serverに溜まっているログをロードして加算が必要。
+            //1.いわゆる、PlayerPrefs上のログ＋現在のプレイのログを読み込む
+            PlayLog log = this.player.playLog;
 
-            int now_val = start_val - (unit_val * log.records.Count);
+            //2.サーバに溜まっているログを読み込む
+            ResourceUpdaterWithNetworking sv = new ResourceUpdaterWithNetworking();
+            PlayLog logAtServer = sv.LoadPlayLog(this.player);
+            Debug.Log($"LoadLog At Server Len={logAtServer.records.Count}");
+
+            //1.と2.をつなげたログを作る。
+            PlayLog temp = new PlayLog(this.player.id);
+            temp.records = temp.records.Concat(log.records).Concat(logAtServer.records).ToList();
+
+            int now_val = start_val - (unit_val * temp.records.Count);
 
             string res = disp_target_name + "の最初は、" + start_val + "でした。";
-            res += player.disp_name + "は、いままで" + log.records.Count + " 回問題をやりましたから、" + disp_target_name + "は減っており、現在は、" + now_val + "です。";
+            res += player.disp_name + "は、いままで" + temp.records.Count + " 回問題をやりましたから、" + disp_target_name + "は減っており、現在は、" + now_val + "です。";
             res += "目標 " + goal_val + " まで、頑張ろう！";
 
             return res;

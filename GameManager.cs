@@ -54,7 +54,7 @@ namespace NovelGame
 
         public void SavePlayer()
         {
-            this.player.SaveAllData();
+            this.player.SaveAllWithNetworking();
         }
     }
 }
