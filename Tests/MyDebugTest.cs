@@ -47,5 +47,28 @@ namespace Tests{
                 Debug.Log(r.timeStamp);
             }
         }
+
+        [Test]
+        public void ShowResources(){
+            //たまたまResources配下を見たくなっただけの捨てテストコード
+            // Resourcesディレクトリ内のすべてのアセットを読み込む
+            UnityEngine.Object[] loadedAssets = Resources.LoadAll("");
+            //string res = "";
+
+            // 読み込んだアセットをログに表示
+            foreach (UnityEngine.Object asset in loadedAssets)
+            {
+                Debug.Log("Loaded Asset: " + asset.name);
+                //res += " " + asset.name;
+            }
+            string root_url = Resources.Load<TextAsset>("root_url_for_test").text;
+            string player_group_uuid = Resources.Load<TextAsset>("player_group_uuid_for_test").text;
+
+            //原因は、root_url_for_testに"root_url _for_test"と余計な空白が混じっていただけ
+//            string root_url = Resources.Load<TextAsset>("root_url").text;
+//            string player_group_uuid = Resources.Load<TextAsset>("player_group_uuid").text;
+
+            //return res;
+        }
     }
 }
